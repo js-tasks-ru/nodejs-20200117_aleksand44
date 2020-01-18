@@ -1,1 +1,1 @@
-module.exports = num => typeof num === 'number';
+module.exports = (num) => typeof num === 'number';
