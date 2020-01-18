@@ -11,3 +11,6 @@ rules:
     - code: 100
   require-jsdoc:
     - off
+  arrow-parens:
+    - error
+    - "as-needed"
