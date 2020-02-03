@@ -22,10 +22,16 @@ function createFile(req, res) {
       .on('end', () => {
         body = Buffer.concat(body).toString();
 
+        const limitStream = new LimitSizeStream({limit: 1000000});
+
+        limitStream.on('error', () => {
+          res.statusCode = 413;
+          res.end('файл слишком большой');
+        });
+
         const writableStream = fs.createWriteStream(filepath, {flags: 'wx'});
 
         writableStream.on('error', (err) => {
-          console.log('err', err);
           if (err.code === 'EEXIST') {
             res.statusCode = 409;
             res.end('данный фыйл уже существует');
@@ -40,8 +46,10 @@ function createFile(req, res) {
           res.end('alright');
         });
 
-        writableStream.write(body);
-        writableStream.end();
+        limitStream.write(body);
+        limitStream.end();
+
+        limitStream.pipe(writableStream);
       });
 }
 
