@@ -41,7 +41,7 @@ function createFile(req, res) {
           res.statusCode = 500;
           res.end('серверная ошибка');
         });
-        writableStream.on('finish', () => {
+        writableStream.on('close', () => {
           res.statusCode = 201;
           res.end('alright');
         });
