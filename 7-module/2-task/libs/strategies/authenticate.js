@@ -6,13 +6,12 @@ module.exports = async function authenticate(strategy, email, displayName, done)
   }
 
   try {
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
 
     if (!user) {
-      const newUser = await User.create({ email, displayName });
-
-      return done(null, newUser);
+      user = await User.create({ email, displayName });
     }
+
     return done(null, user);
   }
 
